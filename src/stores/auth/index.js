@@ -1,11 +1,13 @@
+import { formatAccountBalance } from "../../lib/wallet/balance";
 import { enableBittensorExtension } from "../../lib/wallet/connection";
-import { ApiPromise } from "@polkadot/api";
+
 const initialAuthState = {
   isLoggedIn: false,
   address: null,
   name: null,
   extension: null,
   error: null,
+  balance: "0 TAO",
 };
 
 const createAuthSlice = (set) => ({
@@ -29,11 +31,14 @@ const createAuthSlice = (set) => ({
         // console.log({ chain, nodeName, nodeVersion });
 
         if (!accounts.length) throw new Error("No accounts found");
+        const balances = await formatAccountBalance(accounts[0].address);
+
         set((state) => {
           state.authState.extension = extension;
           state.authState.address = accounts[0].address;
           state.authState.name = accounts[0].name;
           state.authState.isLoggedIn = true;
+          state.authState.balance = balances.free || "0 TAO";
         });
       } catch (error) {
         console.error(error);

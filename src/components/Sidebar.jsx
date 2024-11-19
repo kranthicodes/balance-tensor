@@ -4,9 +4,10 @@ import { useGlobalStore } from "../stores/globalStore";
 import { shortenAddress } from "../utils/shortenAddress";
 
 export default function Sidebar({ toggleWalletSidebar, sidebarRef }) {
-  const [address, name, logout] = useGlobalStore((state) => [
+  const [address, name, balance, logout] = useGlobalStore((state) => [
     state.authState.address,
     state.authState.name,
+    state.authState.balance,
     state.authActions.logout,
   ]);
   return (
@@ -33,10 +34,14 @@ export default function Sidebar({ toggleWalletSidebar, sidebarRef }) {
               <span className="text-lg text-gray-300">
                 {name ? name : shortenAddress(address, 6)}
               </span>
-              {name && <div className="text-sm text-gray-400">({shortenAddress(address, 6)})</div>}
+              {name && (
+                <div className="text-sm text-gray-400">
+                  ({shortenAddress(address, 6)})
+                </div>
+              )}
             </div>
           </div>
-          <div className="text-lg text-yellow-500">1.36 TAO</div>
+          <div className="text-lg text-yellow-500">{balance}</div>
         </div>
 
         <div className="flex flex-col space-y-4">
