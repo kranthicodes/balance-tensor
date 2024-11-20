@@ -8,12 +8,16 @@ const initialAuthState = {
   extension: null,
   error: null,
   balance: "0 TAO",
+  isLoggingIn: false,
 };
 
 const createAuthSlice = (set) => ({
   authState: initialAuthState,
   authActions: {
     login: async () => {
+      set((state) => {
+        state.authState.isLoggingIn = true;
+      });
       try {
         const extension = await enableBittensorExtension(
           window.location.origin
@@ -39,11 +43,13 @@ const createAuthSlice = (set) => ({
           state.authState.name = accounts[0].name;
           state.authState.isLoggedIn = true;
           state.authState.balance = balances.free || "0 TAO";
+          state.authState.isLoggingIn = false;
         });
       } catch (error) {
         console.error(error);
         set((state) => {
-          state.error = "Failed to login";
+          state.authState.error = "Failed to login";
+          state.authState.isLoggingIn = false;
         });
       }
     },

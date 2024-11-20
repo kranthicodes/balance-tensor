@@ -3,10 +3,11 @@ import Sidebar from "./Sidebar";
 import { useGlobalStore } from "../stores/globalStore";
 import { shortenAddress } from "../utils/shortenAddress";
 export default function ProfileButton() {
-  const [address, name, login] = useGlobalStore((state) => [
+  const [address, name, login, isLoggingIn] = useGlobalStore((state) => [
     state.authState.address,
     state.authState.name,
     state.authActions.login,
+    state.authState.isLoggingIn,
   ]);
   const sideBarRef = useRef(null);
 
@@ -23,7 +24,8 @@ export default function ProfileButton() {
           id="connectButton"
           className="bg-[#ffbb00] text-[#1c1c1c] px-6 py-2 rounded-lg font-semibold hover:bg-[#ffd700] transition-all duration-300 gold-glow"
         >
-          <i className="bi bi-wallet2 mr-2"></i>Connect Wallet
+          <i className="bi bi-wallet2 mr-2"></i>
+          {isLoggingIn ? "Connecting..." : "Connect Wallet"}
         </button>
       </div>
     );
